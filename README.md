@@ -2,19 +2,19 @@ Android Drawing Examples
 ===========
 <b>eclipse/</b> has the eclipse projects, no longer updated.  Everything else is in andriod studio
 
-<b>DrawDemo1</b> uses a canvas from a imageview to draw on.  There are 4 fragments.  main draws different types of objects, based on a spinner and some need two taps to be drawn like a line.  there is a animated fragments to clear an uses a thread, asyc uses a aysctask. draw1 only draws one object on the screen.
+<b>DrawDemo1</b> uses a canvas from a imageview to draw on.  There are 4 fragments.  main draws different types of objects, based on a spinner and some need two taps to be drawn like a line.  there is a animated fragments to clear an uses a thread, asyc uses a aysctask. draw1 only draws one object on the screen. <i> Useful for drawing different shapes and using tap. </i>
 
-<b>drawDemo2</b> uses a customview to draw on a canvas.  There is also a touch listener, to draw blocks.
+<b>drawDemo2</b> uses a customview to draw on a canvas.  There is also a touch listener, to draw blocks. <i>Uses a grid.</i>
 
-<b>AlienInvaders</b> is a very simple space invaders like game using a surfaceview.
+<b>AlienInvaders</b> is a very simple space invaders like game using a surfaceview. <i>How do collisions happen? How does time iterate?</i>
 
-<b>GraphicOverlayDemo</b> is an example of how to create a customview to draw on other views.
+<b>GraphicOverlayDemo</b> is an example of how to create a customview to draw on other views. <i>Could be useful to incorporate text with our custom animations and drawing.</i>
 
-<b>SurfaceViewDemo</b> uses a surfaceview.  Since a surface is for "animated" drawing, an alien moves accross the screen.  The user touches it and it moves to a new location. It shows to use an extended surfaceview or all it in the activity.
+<b>SurfaceViewDemo</b> uses a surfaceview.  Since a surface is for "animated" drawing, an alien moves accross the screen.  The user touches it and it moves to a new location. It shows to use an extended surfaceview or all it in the activity. <i>Could be useful for animation.</i>
 
-<b>TextureViewDemo</b> is an example of how to draw on a surface (via a canvas) of a TextureView.  It uses a thread to update the moving block.  It shows to use an extended textureView and how use all the code in the main.  (same example as the surfaceViewDemo)
+<b>TextureViewDemo</b> is an example of how to draw on a surface (via a canvas) of a TextureView.  It uses a thread to update the moving block.  It shows to use an extended textureView and how use all the code in the main.  (same example as the surfaceViewDemo). <i> How does the threading work???</i>
 
-<b>FlappyAlien</b> is a simple FlappyBird clone, to show how a game work work on a TextureView.
+<b>FlappyAlien</b> is a simple FlappyBird clone, to show how a game work work on a TextureView. <i>Animation.</i>
 
 <b>legacy</b> no longer updated code.<br>
 DrawDemo uses a canvas to draw on, then display via an imageview and  is no longer updated<BR>
