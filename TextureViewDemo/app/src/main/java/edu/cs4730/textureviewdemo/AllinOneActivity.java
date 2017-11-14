@@ -23,8 +23,11 @@ import android.widget.FrameLayout;
 public class AllinOneActivity extends AppCompatActivity implements TextureView.SurfaceTextureListener {
 
 
-    private TextureView mTextureView;
-    private RenderingThread mThread;
+    private TextureView mTextureView1;
+    private RenderingThread mThread1;
+
+    private TextureView mTextureView2;
+    private RenderingThread mThread2;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,12 +38,19 @@ public class AllinOneActivity extends AppCompatActivity implements TextureView.S
         FrameLayout content = new FrameLayout(this);
 
         //get a TextureView and set it up with all code below
-        mTextureView = new TextureView(this);
-        mTextureView.setSurfaceTextureListener(this);
-        //mTextureView.setOpaque(false);  //normally, yes, but we need to see the block here.
+        mTextureView1 = new TextureView(this);
+        mTextureView1.setSurfaceTextureListener(this);
+        //mTextureView1.setOpaque(false);  //normally, yes, but we need to see the block here.
 
         //add the TextureView to our layout from above.
-        content.addView(mTextureView, new FrameLayout.LayoutParams(500, 500, Gravity.CENTER));
+        content.addView(mTextureView1, new FrameLayout.LayoutParams(500, 500, Gravity.LEFT));
+
+
+        mTextureView2 = new TextureView(this);
+        mTextureView2.setSurfaceTextureListener(this);
+        content.addView(mTextureView2, new FrameLayout.LayoutParams(500, 500, Gravity.RIGHT));
+
+
         setContentView(content);
 
     }
@@ -50,8 +60,11 @@ public class AllinOneActivity extends AppCompatActivity implements TextureView.S
      */
     @Override
     public void onSurfaceTextureAvailable(SurfaceTexture surface, int width, int height) {
-        mThread = new RenderingThread(mTextureView);
-        mThread.start();
+        mThread1 = new RenderingThread(mTextureView1);
+        mThread1.start();
+
+        mThread2 = new RenderingThread(mTextureView2);
+        mThread2.start();
     }
 
     @Override
@@ -61,7 +74,8 @@ public class AllinOneActivity extends AppCompatActivity implements TextureView.S
 
     @Override
     public boolean onSurfaceTextureDestroyed(SurfaceTexture surface) {
-        if (mThread != null) mThread.stopRendering();
+        if (mThread1 != null) mThread1.stopRendering();
+        if (mThread2 != null) mThread2.stopRendering();
         return true;
     }
 
@@ -88,17 +102,24 @@ public class AllinOneActivity extends AppCompatActivity implements TextureView.S
             float speedX = 5.0f;
             float speedY = 3.0f;
 
+            float squareSize = 20.0f;
+
             Paint paint = new Paint();
             paint.setColor(0xff00ff00);
 
             while (mRunning && !Thread.interrupted()) {
-                final Canvas canvas = mSurface.lockCanvas(null);
+                    final Canvas canvas = mSurface.lockCanvas(null);
                 try {
-                    //canvas.drawColor(0x00000000, PorterDuff.Mode.CLEAR);
-                    canvas.drawColor(Color.BLACK, PorterDuff.Mode.CLEAR);
-                    canvas.drawRect(x, y, x + 20.0f, y + 20.0f, paint);
+                    if(canvas != null) {
+                        //canvas.drawColor(0x00000000, PorterDuff.Mode.CLEAR);
+                        canvas.drawColor(Color.BLACK, PorterDuff.Mode.CLEAR);
+                        canvas.drawRect(x, y, x + squareSize, y + squareSize, paint);
+                    }
                 } finally {
-                    mSurface.unlockCanvasAndPost(canvas);
+                    if(canvas != null) {
+                        mSurface.unlockCanvasAndPost(canvas);
+                    }
+
                 }
 
                 if (x + 20.0f + speedX >= mSurface.getWidth() || x + speedX <= 0.0f) {
@@ -112,7 +133,7 @@ public class AllinOneActivity extends AppCompatActivity implements TextureView.S
                 y += speedY;
 
                 try {
-                    Thread.sleep(15);
+                    Thread.sleep(30);
                 } catch (InterruptedException e) {
                     // Interrupted
                 }
