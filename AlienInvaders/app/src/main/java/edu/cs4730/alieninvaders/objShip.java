@@ -10,16 +10,16 @@ import android.graphics.Canvas;
 
 class objShip extends obj {
 
-  private Bitmap shipBmp;
+private Bitmap shipBmp;
 
-  objShip(int tx, int ty, int w, int wid, int hei, Bitmap pic) {
+objShip(int tx, int ty, int w, int wid, int hei, Bitmap pic) {
     super(tx, ty, w, wid, hei);
     shipBmp =  pic;
 
-  }
+}
 
-  @Override
-  void draw(Canvas c) {
+@Override
+void draw(Canvas c) {
     c.drawBitmap(shipBmp, x, y, null);
   }
 
