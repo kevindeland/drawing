@@ -38,6 +38,8 @@ class objAlien extends obj {
 
         }
     }
+
+    // how an alien object is drawn
     @Override
     void draw(Canvas c) {
         imgcnt();

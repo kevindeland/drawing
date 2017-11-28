@@ -75,7 +75,7 @@ public class mySurfaceView extends SurfaceView implements SurfaceHolder.Callback
         //black.setStyle(Paint.Style.STROKE);
         black.setStyle(Paint.Style.FILL);
         // black.setTextSize(black.getTextSize() * 2.0f* scale);  //scale the font size too
-        black.setTextSize(20 * scale);  //20 point font? (not really)  with scaling.
+        black.setTextSize(XCONST.FONT_SIZE * scale);  //20 point font? (not really)  with scaling.
         black.setFakeBoldText(true);
         myRandom = new Random();
 
@@ -92,8 +92,14 @@ public class mySurfaceView extends SurfaceView implements SurfaceHolder.Callback
         getHolder().addCallback(this);
     }
 
-    //this is likely only run once, when the app starts up.
-    //so lots of setup is done here, but we need to wait until we have height and width.
+    /**
+     *
+     * this is likely only run once, when the app starts up.
+     * so lots of setup is done here, but we need to wait until we have height and width.
+     *
+     * @param w
+     * @param h
+     */
     void setupBG(int w, int h) {
         bg = Bitmap.createBitmap(w, h, Bitmap.Config.ARGB_8888);
         Canvas c = new Canvas(bg);
@@ -101,7 +107,7 @@ public class mySurfaceView extends SurfaceView implements SurfaceHolder.Callback
         left = 0;
         right = w;
         //approx 80 pixels at the top and bottom.  the bottom is where we have the left/fire/right "buttons"
-        float standoff = 80 * scale;
+        float standoff = XCONST.TOP_BOTTOM_MARGIN * scale;
         float third = w / 3;
         //third of the width.  plus "height" of buttons
         leftbtn = third;
@@ -123,11 +129,13 @@ public class mySurfaceView extends SurfaceView implements SurfaceHolder.Callback
         //leave middle as light gray
         color.setColor(myColor.getColorbyIndex(9));  //should be a blue.
         c.drawRect(w, top + 1, 0, bottom - 1, color);
+
         //draw green bottom, with lines for the buttons.  plus text.
         color.setColor(myColor.getColorbyIndex(4));  //should be a blue.
         c.drawRect(0, bottom, w, h, color);
         c.drawLine(leftbtn, bottom, leftbtn, h, black);
         c.drawLine(firebtn, bottom, firebtn, h, black);
+
         //now draw text
         float heightcenter = bottom + (standoff / 2 + fontHeight / 2);  //fonts are drawn from the bottom of the font.
         Rect bounds = new Rect();
@@ -148,8 +156,8 @@ public class mySurfaceView extends SurfaceView implements SurfaceHolder.Callback
     }
 
     /*
-    *  Override the draw method.  This is were all the "screen" drawing goes.
-    */
+     *  Override the draw method.  This is were all the "screen" drawing goes.
+     */
     @Override
     public void draw(Canvas c) {
         super.draw(c);
@@ -261,10 +269,10 @@ public class mySurfaceView extends SurfaceView implements SurfaceHolder.Callback
         }
     }
 
-  /*
- * touch event to deal with the left, right, and fire "button"
- *
- */
+    /*
+     * touch event to deal with the left, right, and fire "button"
+     *
+     */
     @Override
     public boolean onTouchEvent(MotionEvent event) {
         int action = event.getAction();
@@ -273,8 +281,9 @@ public class mySurfaceView extends SurfaceView implements SurfaceHolder.Callback
         float y = event.getY();
 
         switch (action) {
+
             case MotionEvent.ACTION_DOWN:
-            if (y > bottom) { //below playing area
+                if (y > bottom) { //below playing area
                 if (x < leftbtn) { //left
                     moveship = -shipmove;  //and yet this seems to be dpi independent, I think... why?
                 } else if (x < firebtn) { //fire
@@ -282,19 +291,20 @@ public class mySurfaceView extends SurfaceView implements SurfaceHolder.Callback
                 } else if (x <= rightbtn) {
                     moveship = shipmove;
                 }
-                return true;
-            }
-            case MotionEvent.ACTION_UP:  //stop moving left or right.  user has lifted their finger.
-            if (y > bottom) { //below playing area
-                if (x < leftbtn) { //left
-                    moveship = 0;
-                } else if (x < firebtn) { //don't care about fire, handled in down.
                     return true;
-                } else if (x <= rightbtn) {
-                    moveship = 0;
                 }
-                return true;
-            }
+
+            case MotionEvent.ACTION_UP:  //stop moving left or right.  user has lifted their finger.
+                if (y > bottom) { //below playing area
+                    if (x < leftbtn) { //left
+                        moveship = 0;
+                    } else if (x < firebtn) { //don't care about fire, handled in down.
+                        return true;
+                    } else if (x <= rightbtn) {
+                        moveship = 0;
+                    }
+                    return true;
+                }
         }
         return false;
     }
@@ -307,11 +317,12 @@ public class mySurfaceView extends SurfaceView implements SurfaceHolder.Callback
     @Override
     public void surfaceCreated(SurfaceHolder surfaceHolder) {
         Log.v(TAG, "surfaceCreated ");
-        // setup the background picture.
+        // ((STEP 1)) setup the background picture.
         Log.v(TAG, "size is width=" + getWidth() + " height is " + getHeight());
         setupBG(getWidth(), getHeight());
 
 
+        // ((STEP 2)) start a new thread
         thread = new myThread(getHolder(), this);
         thread.setRunning(true);
         thread.start();
@@ -351,6 +362,8 @@ public class mySurfaceView extends SurfaceView implements SurfaceHolder.Callback
         private mySurfaceView _mySurfaceView;
         private boolean running = false;
 
+        // TODO examine here
+        // ((STEP 2.1)) initialize thread
         private myThread(SurfaceHolder surfaceHolder, mySurfaceView SurfaceView) {
             _surfaceHolder = surfaceHolder;
             _mySurfaceView = SurfaceView;
@@ -389,7 +402,7 @@ public class mySurfaceView extends SurfaceView implements SurfaceHolder.Callback
             }
             if (!running) return; //no need to sleep, we are done.
                 try {
-                    Thread.sleep(10);
+                    Thread.sleep(XCONST.SLEEP_TIME);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
